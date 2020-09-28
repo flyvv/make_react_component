@@ -78,13 +78,13 @@ render(){
 export default ${dirName}
 `;
   str = new Buffer(str);
-  fs.writeFile(path.join(dirName, "index." + whatSX), str, catchErr);
+  fs.writeFile(path.join(dirPath, "index." + whatSX), str, catchErr);
 }
 
 function writeCss(dirPath, dirName, fs, cssType) {
   var str = `.${toLine(dirName)}-container {\n  \n}`;
   str = new Buffer(str);
-  fs.writeFile(path.join(dirName, "index" + "." + cssType), str, catchErr);
+  fs.writeFile(path.join(dirPath, "index" + "." + cssType), str, catchErr);
 }
 
 function catchErr(err) {

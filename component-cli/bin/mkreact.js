@@ -2,6 +2,7 @@
 "use strict";
 const createReactComponent = require("../lib/createReactComponent");
 const program = require("commander");
+
 function parseVal(val) {
   return val.split(",");
 }
@@ -17,6 +18,16 @@ function getDirName(param) {
   return param[2].split(",");
 }
 
+function getDirPath(param) {
+  if (param[3].slice(0, 1) === "-") {
+    return "";
+  } else if (param[3].slice(0, 1) !== "/") {
+    return `/${param[3]}`;
+  } else {
+    return param[3];
+  }
+}
+
 (function () {
   let usePureComponent = false;
   let componentStatus = "";
@@ -25,7 +36,7 @@ function getDirName(param) {
   let name;
 
   program
-    .version("1.0.4")
+    .version("1.2.0")
     .option("-s --scss [names]", "replace css to Scss", parseVal)
     .option("-l --less [names]", "replace css to Less", parseVal)
     .option("-p --pure [names]", "use pure component", parseVal)
@@ -34,6 +45,8 @@ function getDirName(param) {
     .parse(process.argv);
 
   name = getDirName(process.argv);
+  let diyPath = getDirPath(process.argv);
+
   if (program.pure) {
     usePureComponent = true;
     componentStatus = "pure ";
@@ -50,6 +63,6 @@ function getDirName(param) {
     whatSX = "jsx";
   }
   log(name, componentStatus, style, whatSX);
-  createReactComponent(name, style, usePureComponent, whatSX);
+  createReactComponent(name, style, usePureComponent, whatSX, diyPath);
   console.log(["done!"]);
 })();
