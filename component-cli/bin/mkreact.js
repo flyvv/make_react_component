@@ -6,6 +6,7 @@ const program = require("commander");
 function parseVal(val) {
   return val.split(",");
 }
+
 function log(name, componentStatus, style, whatSX) {
   console.log("starting...");
   console.log("name:", name, "style:", [style], "whatSX:", [whatSX]);
