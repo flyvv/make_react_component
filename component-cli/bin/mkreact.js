@@ -35,14 +35,17 @@ function getDirPath(param) {
   let style = "css";
   let whatSX = "tsx";
   let name;
+  let useStore = false
 
   program
-    .version("1.2.0")
+    .version("1.1.2")
     .option("-s --scss [names]", "replace css to Scss", parseVal)
     .option("-l --less [names]", "replace css to Less", parseVal)
     .option("-p --pure [names]", "use pure component", parseVal)
     .option("-j --jsx [names]", "use jsx component", parseVal)
     .option("-t --tsx [names]", "use tsx component", parseVal)
+    // 老婆使用的roy.js 为她特定了store.js的模版代码
+    .option("-m --model [names]", "use store with component", parseVal)
     .parse(process.argv);
 
   name = getDirName(process.argv);
@@ -63,7 +66,10 @@ function getDirPath(param) {
   } else if (program.jsx) {
     whatSX = "jsx";
   }
+  if(program.model){
+    useStore = true
+  }
   log(name, componentStatus, style, whatSX);
-  createReactComponent(name, style, usePureComponent, whatSX, diyPath);
+  createReactComponent(name, style, usePureComponent, whatSX, diyPath,useStore);
   console.log(["done!"]);
 })();

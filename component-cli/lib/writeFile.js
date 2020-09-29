@@ -13,12 +13,24 @@ function toLine(str) {
   return temp;
 }
 
-function writeTsx(dirPath, dirName, fs, cssType, usePureComponent, whatSX) {
+function writeTsx(dirPath, dirName, fs, cssType, usePureComponent, whatSX,useStore) {
   let str = `\
 import * as React from 'react'
 import * as _ from 'lodash';
-import './index.${cssType}'
 `;
+if(useStore){
+  str += `\
+import { inject } from '@royjs/core';
+import store from './store';
+import './index.${cssType}'
+
+@inject(store)
+`
+}else{
+  str +=`\
+import './index.${cssType}'
+  `
+}
   switch (whatSX) {
     case "jsx":
       if (usePureComponent) {
@@ -86,6 +98,23 @@ function writeCss(dirPath, dirName, fs, cssType) {
   str = new Buffer(str);
   fs.writeFile(path.join(dirPath, "index" + "." + cssType), str, catchErr);
 }
+function writeStore (dirPath, dirName, fs){
+  var str = `\
+import { Store } from '@royjs/core';
+
+const store = new Store({
+  state: {
+    name: "${dirName}"
+  },
+  actions: {
+  
+  }
+});\n
+export default store;
+  `;
+  str = new Buffer(str);
+  fs.writeFile(path.join(dirPath, "store.js"), str, catchErr);
+}
 
 function catchErr(err) {
   if (err) {
@@ -95,4 +124,5 @@ function catchErr(err) {
 module.exports = {
   writeTsx: writeTsx,
   writeCss: writeCss,
+  writeStore:writeStore,
 };
